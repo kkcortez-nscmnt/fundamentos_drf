@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+venv/
+.venv/
+env/
+.env/
+myenv/
+instance/
+*.egg-info/
+.python-version
+
+# Django specific
+*.log
+*.pot
+*.mo
+*.db
+local_settings.py
+/static/
+/media/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Packages
+node_modules/
+
+# Temporary files
+*~
+*.tmp
+
+# Docker files
+docker-compose.override.yml
