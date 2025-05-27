@@ -1,12 +1,16 @@
-from django.http import JsonResponse
-from django.shortcuts import render
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from students.models import Student
 
+from .serializers import StudentSerializer
 
+
+@api_view(["GET"])
 def students_view(request):
-
-    # primeiro exemplo resposta em formato json
-    students = Student.objects.all()  # QuerySet nao é seriaizavel.
-    students_list = list(students.values())  # Serialização Manual
-    return JsonResponse(students_list, safe=False)
+    if request.method == "GET":
+        # recuperando todos os dados
+        students = Student.objects.all()
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
