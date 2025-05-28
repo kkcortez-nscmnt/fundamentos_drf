@@ -1,13 +1,14 @@
 from django.http import Http404
-from rest_framework import status
+from rest_framework import generics, mixins, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from classes.models import Class
 from employees.models import Employee
 from students.models import Student
 
-from .serializers import EmployeeSerializer, StudentSerializer
+from .serializers import ClassSerializer, EmployeeSerializer, StudentSerializer
 
 
 @api_view(["GET", "POST"])
@@ -94,3 +95,35 @@ class EmployeeDetailView(APIView):
         employee = self.get_object(pk)
         employee.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ClassView(
+    mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
+):
+    queryset = Class.objects.all()
+    serializer_class = ClassSerializer
+
+    def get(self, request):
+        return self.list(request)
+
+    def post(self, request):
+        return self.create(request)
+
+
+class ClassDetailView(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView,
+):
+    queryset = Class.objects.all()
+    serializer_class = ClassSerializer
+
+    def get(self, request, pk):
+        return self.retrieve(request, pk=pk)
+
+    def put(self, request, pk):
+        return self.update(request, pk=pk)
+
+    def delete(self, request, pk):
+        return self.destroy(request, pk=pk)

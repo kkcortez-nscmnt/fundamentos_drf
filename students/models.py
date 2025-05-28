@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Student(models.Model):
     student_id = models.CharField(max_length=10)
     name = models.CharField(max_length=50)
