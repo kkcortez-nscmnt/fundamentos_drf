@@ -5,6 +5,8 @@ from .views import (
     ClassView,
     EmployeeDetailView,
     EmployeesView,
+    TeacherDetailView,
+    TeacherView,
     student_detail_view,
     students_view,
 )
@@ -15,5 +17,6 @@ urlpatterns = [
     path("employees/", EmployeesView.as_view()),
     path("employees/<int:pk>", EmployeeDetailView.as_view()),
     path("classes/", ClassView.as_view()),
-    path("classes/<int:pk>/", ClassDetailView.as_view()),
+    path("teachers/", TeacherView.as_view()),
+    path("teachers/<int:pk>/", TeacherDetailView.as_view()),
 ]

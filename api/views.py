@@ -7,8 +7,14 @@ from rest_framework.views import APIView
 from classes.models import Class
 from employees.models import Employee
 from students.models import Student
+from teachers.models import Teacher
 
-from .serializers import ClassSerializer, EmployeeSerializer, StudentSerializer
+from .serializers import (
+    ClassSerializer,
+    EmployeeSerializer,
+    StudentSerializer,
+    TeacherSerializer,
+)
 
 
 @api_view(["GET", "POST"])
@@ -127,3 +133,14 @@ class ClassDetailView(
 
     def delete(self, request, pk):
         return self.destroy(request, pk=pk)
+
+
+class TeacherView(generics.ListCreateAPIView):
+    queryset = Teacher.objects.all()
+    serializer_class = TeacherSerializer
+
+
+class TeacherDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Teacher.objects.all()
+    serializer_class = TeacherSerializer
+    lookup_field = "pk"
