@@ -1,15 +1,18 @@
 from django.http import Http404
-from rest_framework import generics, mixins, status
+from django.shortcuts import get_object_or_404
+from rest_framework import generics, mixins, status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from campus.models import Campus
 from classes.models import Class
 from employees.models import Employee
 from students.models import Student
 from teachers.models import Teacher
 
 from .serializers import (
+    CampusSerializer,
     ClassSerializer,
     EmployeeSerializer,
     StudentSerializer,
@@ -144,3 +147,38 @@ class TeacherDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
     lookup_field = "pk"
+
+
+class CampusViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        queryset = Campus.objects.all()
+        serializer = CampusSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def create(self, request):
+        serializer = CampusSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+        return Response(serializer.errors)
+
+    def retrieve(self, request, pk=None):
+        campus = get_object_or_404(Campus, pk=pk)
+        serializer = CampusSerializer(campus)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def update(self, request, pk=None):
+        campus = get_object_or_404(Campus, pk=pk)
+        serializer = CampusSerializer(campus, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk=None):
+        campus = get_object_or_404(Campus, pk=pk)
+        campus.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
